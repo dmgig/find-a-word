@@ -9,3 +9,15 @@
 .word{
   padding-right:20px;
 }
+
+.selectA{
+  background-color: yellow;
+}
+
+.inline{
+  background-color: lightGreen;
+}
+
+.outofline{
+  background-color: pink;
+}
