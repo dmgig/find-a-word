@@ -29,3 +29,7 @@
 .foundMe{
   background-color:lightBlue;
 }
+
+.selectA.foundMe{
+  background-color:yellow;
+}
