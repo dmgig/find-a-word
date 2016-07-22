@@ -102,6 +102,13 @@
       select: function(){
         console.log($(this));
         
+        // if selected is reeselected, remove selection
+        if($(this).hasClass('selectA')){
+          $(this).removeClass('selectA');
+          wordfinder.gameboard.state = 'waiting';
+          return;
+        }
+        
         var state = wordfinder.gameboard.state;
         console.log(state);
         
@@ -114,7 +121,15 @@
           $(this).addClass('selectB');
           wordfinder.gameboard.state = 'selectB';
           wordfinder.gameboard.selected_b = [$(this).data('x'), $(this).data('y')]          
-          wordfinder.gameboard.checkWord();
+          var is_word = wordfinder.gameboard.checkWord();
+          if(is_word){
+            wordfinder.gameboard.state = 'waiting';
+            wordfinder.gameboard.resetBoard();
+          }else{
+            alert('That is not a word.')
+            $(this).removeClass('selectB');
+            wordfinder.gameboard.state = 'selectA';
+          }
           
         }else if(state == 'selectB'){
           
@@ -156,14 +171,13 @@
         
         if(wordfinder.wordlist.isInList(selected_word)){
           console.log('found a word')
-          wordfinder.wordlist.crossOffList(selected_word);
           wordfinder.gameboard.highlightWord(selected_a, selected_b);
-          wordfinder.gameboard.resetBoard();
+          wordfinder.wordlist.crossOffList(selected_word);
+          return true;
         }else{
-          wordfinder.gameboard.resetBoard();
           console.log('not a word')
+          return false;
         }
-        
       },
 
       getWord: function(selected_a, selected_b){
@@ -195,6 +209,7 @@
       resetBoard: function(){
         $('td').removeClass('selectA');
         $('td').removeClass('selectB');
+        wordfinder.gameboard.state = 'waiting';
       }
       
     }
