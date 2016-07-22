@@ -11,6 +11,7 @@
       wordfinder.wordlist.create();
       wordfinder.gameboard.create();
       wordfinder.controls.create();
+      wordfinder.resultsboard.create();
     },
     
     /**
@@ -31,14 +32,46 @@
         console.log('resign');
         $("#wordlist-container").empty();
         $("#gameboard-container").empty();      
-      },      
+      },
+      gameCompleted: function(){
+        console.log('game-completed');
+      },         
+    },
+    
+    resultsboard: {
+ 
+       create: function(){
+        console.log('create results board');
+        
+        var display = $('<div></div>')
+                        .attr('id', 'results');
+        $('#results-container')
+          .append(display);
+
+        this.update('Ready to Play!');
+
+      },
+      
+      update: function(update){
+        $("#results").html(update);
+      },
+      
+      indicateComplete: function(){
+        this.update('You found all the words on this puzzle.');
+        $("#results").addClass('completed');
+      }
+      
     },
 
     /**
      * list of words to find
      */    
     wordlist:{
+      
       words: data.wordlist,
+      
+      found: [],
+      
       create: function(){
         console.log('create wordlist');
         console.log('wordlist '+data.wordlist.length)
@@ -54,18 +87,29 @@
           display.append(word);
         }
       },
+      
       isInList: function(word){
         var index = this.words.indexOf(word);
-        if(index != -1) return true;
-        else            return false;
+        if(index != -1){ 
+          this.found.push(word);
+          return true;
+        }else return false;
       },
+      
       crossOffList: function(word){
         $('span.word').each(function(i, el){
           if($(el).text() == word){
             $(el).wrap('<strike></strike>');
           }
         })
+      },
+      
+      isGameCompleted: function(){
+        console.log('is game completed');
+        console.log(this)
+        return this.words.length == this.found.length;
       }
+
     },
     
     gameboard: {
@@ -132,6 +176,9 @@
           var is_word = wordfinder.gameboard.checkWord();
           if(is_word){
             wordfinder.gameboard.state = 'waiting';
+            if(wordfinder.wordlist.isGameCompleted()){
+              wordfinder.resultsboard.indicateComplete();
+            }
             wordfinder.gameboard.resetBoard();
           }else{
             alert('That is not a word.')
@@ -147,7 +194,8 @@
       isInLine: function(){
         
         var state = wordfinder.gameboard.state;
-        if(state != 'selectA') return;
+        if(state != 'selectA')          return;
+        if($(this).hasClass('selectA')) return;
         
         var selected_a = wordfinder.gameboard.selected_a;
         var thissquare = [$(this).data('x'), $(this).data('y')];
