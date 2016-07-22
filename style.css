@@ -14,10 +14,18 @@
   background-color: yellow;
 }
 
+.selectB{
+  background-color: orange;
+}
+
 .inline{
   background-color: lightGreen;
 }
 
 .outofline{
   background-color: pink;
+}
+
+.foundMe{
+  background-color:lightBlue;
 }
