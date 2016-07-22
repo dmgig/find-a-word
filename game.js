@@ -5,31 +5,38 @@
   console.log(lineMath);
   
   var wordfinder = {
+    
     init: function(){
       console.log('init');
       wordfinder.wordlist.create();
       wordfinder.gameboard.create();
       wordfinder.controls.create();
     },
-    reset: function(){
-      console.log('reset');
-      $("#wordlist-container").empty();
-      $("#gameboard-container").empty();
-      wordfinder.init();
-    },
-    resign: function(){
-      console.log('resign');
-      $("#wordlist-container").empty();
-      $("#gameboard-container").empty();      
-    },
     
+    /**
+     * basic game controls
+     */
     controls:{
       create: function(){
-        $('#reset').off().on('click', wordfinder.reset);
-        $('#resign').off().on('click', wordfinder.resign);
-      }
+        $('#reset').off().on('click', wordfinder.controls.reset);
+        $('#resign').off().on('click', wordfinder.controls.resign);
+      },
+      reset: function(){
+        console.log('reset');
+        $("#wordlist-container").empty();
+        $("#gameboard-container").empty();
+        wordfinder.init();
+      },
+      resign: function(){
+        console.log('resign');
+        $("#wordlist-container").empty();
+        $("#gameboard-container").empty();      
+      },      
     },
-    
+
+    /**
+     * list of words to find
+     */    
     wordlist:{
       words: data.wordlist,
       create: function(){
@@ -72,6 +79,7 @@
       create: function(){
         
         this.state = 'waiting'
+        
         var board = $('<table></table>')
                       .attr('id','gameboard');
         $('#gameboard-container').append(board);
