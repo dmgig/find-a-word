@@ -1,9 +1,32 @@
+#results{
+  margin:10px;
+  padding:10px;
+  border:1px solid #CCC;
+  color:#666;
+}
+
+#results.completed{
+  background-color: lightGreen;
+  border:2px solid green;
+}
+
+#gameboard{
+  margin: 0 auto;
+}
+
 #gameboard td{
   text-align:center;
   vertical-align:middle;
   height:21px;
   width:21px;
   outline:1px solid #CCC;
+}
+
+#controls{
+  margin:10px;
+  padding:10px;
+  border:1px solid #CCC;
+  color:#666;
 }
 
 .word{
