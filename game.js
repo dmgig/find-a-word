@@ -1,50 +1,8 @@
-(function(data){
+(function(data, lineMath){
   'use strict';
   
   console.log(data);
-  
-  // http://stackoverflow.com/questions/13491676/get-all-pixel-coordinates-between-2-points
-  var lineMath = function(A, B){
-    
-    A = [Number(A[0]), Number(A[1])];
-    B = [Number(B[0]), Number(B[1])];
-    
-    console.log(A);
-    console.log(B);
-    
-    function slope(a, b) {
-      if (a[0] == b[0]) {
-        return null;
-      }
-      return (b[1] - a[1]) / (b[0] - a[0]);
-    }
-
-    function intercept(point, slope) {
-      
-      console.log(point)
-      console.log(slope)
-      
-      if (slope === null) {
-        // vertical line
-        return point[0];
-      }
-      return point[1] - slope * point[0];
-    }
-
-    var m = slope(A, B);
-    var b = intercept(A, m);
-
-    console.log(m);
-    console.log(b);
-
-    var coordinates = [];
-    for (var x = A[0]; x <= B[0]; x++) {
-      var y = m * x + b;
-      coordinates.push([x, y]);
-    }
-    
-    return coordinates;
-  }
+  console.log(lineMath);
   
   var wordfinder = {
     init: function(){
@@ -91,30 +49,35 @@
     },
     
     gameboard: {
+      
       state: 'startup',
+      
       selected_a: [],
+      
       selected_b: [],
+      
       create: function(){
         
         this.state = 'waiting'
         var board = $('<table></table>')
                       .attr('id','gameboard');
-        $('#gameboard-container')
-          .append(board);
+        $('#gameboard-container').append(board);
+          
+        function makeGamesquare(letter){
+          return $('<td>'+letter+'</td>')
+                  .data('x',i)
+                  .data('y',j)
+                  .on('click', wordfinder.gameboard.select)
+                  .on('mouseenter', wordfinder.gameboard.isInLine)
+                  .on('mouseleave', wordfinder.gameboard.clearInLine);          
+        }
         
         for(var i in data.gameboard){
-          
           board.append('<tr></tr>');
           
           for(var j in data.gameboard[i]){
             var letter     = data.gameboard[i][j];
-            var gamesquare = $('<td>'+letter+'</td>')
-                                .data('x',i)
-                                .data('y',j)
-                                .on('click', wordfinder.gameboard.select)
-                                .on('mouseenter', wordfinder.gameboard.isInLine)
-                                .on('mouseleave', wordfinder.gameboard.clearInLine); 
-                                
+            var gamesquare = makeGamesquare(letter);
             board
               .find('tr:eq('+i+')')
               .append(gamesquare);
@@ -209,4 +172,4 @@
   
   wordfinder.init();
   
-})(data)
+})(data, lineMath)
