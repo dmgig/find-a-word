@@ -157,6 +157,7 @@
         if(wordfinder.wordlist.isInList(selected_word)){
           console.log('found a word')
           wordfinder.wordlist.crossOffList(selected_word);
+          wordfinder.gameboard.highlightWord(selected_a, selected_b);
           wordfinder.gameboard.resetBoard();
         }else{
           wordfinder.gameboard.resetBoard();
@@ -181,6 +182,14 @@
         
         return word;
         
+      },
+
+      highlightWord(selected_a, selected_b){
+        var coordinates = lineMath(selected_a, selected_b);
+        for(var i in coordinates){
+          var c = coordinates[i];
+          $('tr:eq('+c[0]+') td:eq('+c[1]+')').addClass('foundMe');
+        }        
       },
       
       resetBoard: function(){
