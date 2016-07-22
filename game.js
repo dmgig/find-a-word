@@ -32,6 +32,7 @@
     wordlist:{
       create: function(){
         console.log('create wordlist');
+        console.log('wordlist '+data.wordlist.length)
         
         var display = $('<div></div>')
                         .attr('id', 'wordlist');
@@ -47,8 +48,12 @@
     },
     
     gameboard: {
+      state: 'startup',
+      selectedA: [],
+      selectedB: [],
       create: function(){
-
+        
+        this.state = 'waiting'
         var board = $('<table></table>')
                       .attr('id','gameboard');
         $('#gameboard-container')
@@ -62,7 +67,10 @@
             var letter     = data.gameboard[i][j];
             var gamesquare = $('<td>'+letter+'</td>')
                                 .data('x',i)
-                                .data('y',j); 
+                                .data('y',j)
+                                .on('click', wordfinder.gameboard.select)
+                                .on('mouseenter', wordfinder.gameboard.isInLine)
+                                .on('mouseleave', wordfinder.gameboard.clearInLine); 
                                 
             board
               .find('tr:eq('+i+')')
@@ -70,6 +78,56 @@
 
           }
         }
+      },
+      
+      select: function(){
+        console.log($(this));
+        
+        var state = wordfinder.gameboard.state;
+        
+        if(state == 'waiting'){
+          $(this).addClass('selectA');
+          wordfinder.gameboard.state = 'selectA';
+          wordfinder.gameboard.selectedA = [$(this).data('x'), $(this).data('y')]
+        }else if(state == 'selectA'){
+          
+        }else if(state == 'selectB'){
+          
+        }
+      },
+      
+      isInLine: function(){
+        
+        var state = wordfinder.gameboard.state;
+        if(state != 'selectA') return;
+        
+        var selectedA = wordfinder.gameboard.selectedA;
+        var thissquare = [$(this).data('x'), $(this).data('y')];
+        
+        console.log(selectedA);
+        console.log(thissquare);
+        
+        if(selectedA[0] == thissquare[0] ||
+           selectedA[1] == thissquare[1] ||
+           selectedA[0] - thissquare[0] == selectedA[1] - thissquare[1]){
+            $(this).addClass('inline');
+        }else{
+            $(this).addClass('outofline');
+        }
+        
+      },
+      
+      clearInLine: function(){
+        $(this).removeClass('inline');
+        $(this).removeClass('outofline')
+      },
+      
+      checkWord: function(selectedA, selectedB){
+        
+      },
+      
+      selectB: function(gamesquare){
+        
       }
       
     }
