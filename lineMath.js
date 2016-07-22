@@ -1,4 +1,5 @@
 // http://stackoverflow.com/questions/13491676/get-all-pixel-coordinates-between-2-points
+// http://jharaphula.com/javascript-function-to-find-all-points-between-any-two-points/
 var lineMath = function(A, B){
     
   A = [Number(A[0]), Number(A[1])];
