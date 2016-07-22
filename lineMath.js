@@ -28,15 +28,30 @@ var lineMath = function(A, B){
 
   var m = slope(A, B);
   var b = intercept(A, m);
-
-  console.log(m);
-  console.log(b);
+  
+  var swapped = false;
+  if (A[0] > B[0] || A[1] > B[1]){
+    var A2, B2;
+    swapped = true;
+    B2 = [A[0], A[1]];
+    A2 = [B[0], B[1]];
+    A = A2; B = B2;
+  }
 
   var coordinates = [];
-  for (var x = A[0]; x <= B[0]; x++) {
-    var y = m * x + b;
-    coordinates.push([x, y]);
+  if(A[0] != B[0]){
+    for (x = A[0]; x <= B[0]; x++) {
+      var y = m * x + b;
+      coordinates.push([x, y]);
+    }
+  }else{
+    for (y = A[1]; y <= B[1]; y++) {
+      coordinates.push([A[0], y]);
+    }    
   }
+
+  if(swapped)
+    coordinates.reverse();
     
   return coordinates;
 }
