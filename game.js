@@ -5,51 +5,58 @@
   
   var wordfinder = {
     init: function(){
-      this.wordlist.create();
-      this.gameboard.create();
-      this.controls.create();
+      console.log('init');
+      wordfinder.wordlist.create();
+      wordfinder.gameboard.create();
+      wordfinder.controls.create();
     },
     reset: function(){
       console.log('reset');
-      $('body').empty();
-      this.init();
+      $("#wordlist-container").empty();
+      $("#gameboard-container").empty();
+      wordfinder.init();
     },
     resign: function(){
       console.log('resign');
+      $("#wordlist-container").empty();
+      $("#gameboard-container").empty();      
     },
     
     controls:{
       create: function(){
-        $('#reset').on('click', wordfinder.reset);
-        $('#resign').on('click', wordfinder.resign);
+        $('#reset').off().on('click', wordfinder.reset);
+        $('#resign').off().on('click', wordfinder.resign);
       }
     },
     
     wordlist:{
-      display: $('<div></div>').attr('id', 'wordlist'),
       create: function(){
-
+        console.log('create wordlist');
+        
+        var display = $('<div></div>')
+                        .attr('id', 'wordlist');
         $('#wordlist-container')
-          .append(this.display);
+          .append(display);
 
         for(var i in data.wordlist){
           var word = $('<span>'+data.wordlist[i]+'</span>')
                         .addClass('word');
-          this.display.append(word);
+          display.append(word);
         }
       }
     },
     
     gameboard: {
-      board: $('<table></table>').attr('id','gameboard'),
       create: function(){
 
+        var board = $('<table></table>')
+                      .attr('id','gameboard');
         $('#gameboard-container')
-          .append(this.board);
+          .append(board);
         
         for(var i in data.gameboard){
           
-          this.board.append('<tr></tr>');
+          board.append('<tr></tr>');
           
           for(var j in data.gameboard[i]){
             var letter     = data.gameboard[i][j];
@@ -57,7 +64,7 @@
                                 .data('x',i)
                                 .data('y',j); 
                                 
-            this.board
+            board
               .find('tr:eq('+i+')')
               .append(gamesquare);
 
