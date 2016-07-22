@@ -32,11 +32,6 @@
     
     wordlist:{
       words: data.wordlist,
-      isInList: function(word){
-        var index = this.words.indexOf(word);
-        if(index != -1) return true;
-        else            return false;
-      },
       create: function(){
         console.log('create wordlist');
         console.log('wordlist '+data.wordlist.length)
@@ -51,6 +46,18 @@
                         .addClass('word');
           display.append(word);
         }
+      },
+      isInList: function(word){
+        var index = this.words.indexOf(word);
+        if(index != -1) return true;
+        else            return false;
+      },
+      crossOffList: function(word){
+        $('span.word').each(function(i, el){
+          if($(el).text() == word){
+            $(el).wrap('<strike></strike>');
+          }
+        })
       }
     },
     
@@ -149,7 +156,10 @@
         
         if(wordfinder.wordlist.isInList(selected_word)){
           console.log('found a word')
+          wordfinder.wordlist.crossOffList(selected_word);
+          wordfinder.gameboard.resetBoard();
         }else{
+          wordfinder.gameboard.resetBoard();
           console.log('not a word')
         }
         
@@ -171,6 +181,11 @@
         
         return word;
         
+      },
+      
+      resetBoard: function(){
+        $('td').removeClass('selectA');
+        $('td').removeClass('selectB');
       }
       
     }
