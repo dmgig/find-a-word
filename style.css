@@ -1,0 +1,11 @@
+#gameboard td{
+  text-align:center;
+  vertical-align:middle;
+  height:21px;
+  width:21px;
+  outline:1px solid #CCC;
+}
+
+.word{
+  padding-right:20px;
+}
