@@ -2,15 +2,27 @@ body{
   font-family:Arial;
 }
 
-#wordlist{
-  width:800px;
+a.btn{
+  border:2px solid #FFBC7A;
+  border-radius: 12px; 
+  padding:10px;
+  margin:10px;
+  text-align:center;
+  cursor:pointer;
+}
+
+a.btn:hover{
+  background-color:#FFE1C3;
+  color:black;
 }
 
 #results{
   margin:10px;
   padding:10px;
-  border:1px solid #CCC;
-  color:#666;
+  border:1px solid lightGreen;
+  border-radius: 5px; 
+  color:green;
+  text-align:center;
 }
 
 #results.completed{
@@ -21,9 +33,25 @@ body{
 #results.resigned{
   background-color: orange;
   border:2px solid red;
+  color:darkRed;
 }
 
+#wordlist{
+  margin:30px;
+  text-align:center;
+}
+
+#wordlist .word{
+  padding:20px;
+  font-family:monospace;
+  font-size:20px;
+}
+
+/** Gameboard */
+
 #gameboard{
+  font-family:monospace;
+  font-size:20px;
   margin: 0 auto;
 }
 
@@ -34,17 +62,6 @@ body{
   width:21px;
   outline:1px solid #CCC;
   cursor: pointer;
-}
-
-#controls{
-  margin:10px;
-  padding:10px;
-  border:1px solid #CCC;
-  color:#666;
-}
-
-.word{
-  padding-right:20px;
 }
 
 .selectA{
@@ -69,4 +86,13 @@ body{
 
 .selectA.foundMe{
   background-color:yellow;
+}
+
+/** Controls */
+
+#controls{
+  margin:30px;
+  padding:10px;
+  color:#666;
+  text-align:center;
 }
