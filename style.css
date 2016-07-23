@@ -10,6 +10,11 @@
   border:2px solid green;
 }
 
+#results.resigned{
+  background-color: orange;
+  border:2px solid red;
+}
+
 #gameboard{
   margin: 0 auto;
 }
@@ -20,6 +25,7 @@
   height:21px;
   width:21px;
   outline:1px solid #CCC;
+  cursor: pointer;
 }
 
 #controls{
