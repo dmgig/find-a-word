@@ -14,6 +14,7 @@
       console.log('init');
       wordfinder.wordlist.create();
       wordfinder.gameboard.create();
+      wordfinder.canvas.create();
       wordfinder.controls.create();
       wordfinder.resultsboard.create();
     },
@@ -135,6 +136,9 @@
           var word = $('<span>'+data.wordlist[i]+'</span>')
                         .addClass('word');
           display.append(word);
+          if(i % 4 == 0){
+            display.append('<br />');
+          }
         }
       },
       
@@ -180,10 +184,10 @@
                       .attr('id','gameboard');
         $('#gameboard-container').append(board);
           
-        function makeGamesquare(letter){
+        function makeGamesquare(x,y,letter){
           return $('<td>'+letter+'</td>')
-                  .data('x',i)
-                  .data('y',j)
+                  .data('x',x)
+                  .data('y',y)
                   .on('click', wordfinder.gameboard.select)
                   .on('mouseenter', wordfinder.gameboard.isInLine)
                   .on('mouseleave', wordfinder.gameboard.clearInLine);          
@@ -194,7 +198,7 @@
           
           for(var j in data.gameboard[i]){
             var letter     = data.gameboard[i][j];
-            var gamesquare = makeGamesquare(letter);
+            var gamesquare = makeGamesquare(j,i,letter);
             board
               .find('tr:eq('+i+')')
               .append(gamesquare);
@@ -299,7 +303,7 @@
 
         for(var i in coordinates){
           var c = coordinates[i];
-          var letter = $('tr:eq('+c[0]+') td:eq('+c[1]+')').text();
+          var letter = $('tr:eq('+c[1]+') td:eq('+c[0]+')').text();
           wordarr.push(letter);
         }
         var word = wordarr.join('');
@@ -310,11 +314,12 @@
       },
 
       highlightWord(selected_a, selected_b){
-        var coordinates = lineMath(selected_a, selected_b);
-        for(var i in coordinates){
-          var c = coordinates[i];
-          $('tr:eq('+c[0]+') td:eq('+c[1]+')').addClass('foundMe');
-        }        
+        // var coordinates = lineMath(selected_a, selected_b);
+        // for(var i in coordinates){
+        //   var c = coordinates[i];
+        //   $('tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('foundMe');
+        // }
+        wordfinder.canvas.circleWord(selected_a, selected_b);
       },
       
       resetBoard: function(){
@@ -328,6 +333,70 @@
         $('td').off();
       }
       
+    },
+    
+    canvas:{
+      create: function(){
+        var canvas = $('<canvas></canvas>')
+                      .attr('id','gamecanvas');
+        $('#gameboard-container').append(canvas);
+        
+        var left   = $("#gameboard").offset().left - 8;
+        var height = $("#gameboard").height();
+        var width  = $("#gameboard").width();
+        
+        $("#gamecanvas")
+          .css('top', '0px')
+          .css('left', left+'px')
+          .attr('width', width)
+          .attr('height', height);
+      },
+      circleWord: function(A,B){
+        console.log('circleword');
+        console.log(A,B)
+        
+        function f(n){
+          return (n*26)+12;
+        }
+        
+        A = [f(A[0]), f(A[1])];
+        B = [f(B[0]), f(B[1])];
+        console.log(A)
+        console.log(B)
+        var c   = document.getElementById("gamecanvas");
+        var ctx = c.getContext("2d");
+        ctx.beginPath();
+        ctx.lineCap="round";
+        ctx.lineWidth=20;
+        ctx.strokeStyle = this.rainbow(20,Math.floor(Math.random() * 20) + 1  );
+        ctx.moveTo(A[0],A[1]);
+        ctx.lineTo(B[0],B[1]);
+        ctx.stroke();
+      },
+      rainbow: function(numOfSteps, step) {
+        // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
+        // Adam Cole, 2011-Sept-14
+        // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+        var r, g, b;
+        var h = step / numOfSteps;
+        var i = ~~(h * 6);
+        var f = h * 6 - i;
+        var q = 1 - f;
+        switch(i % 6){
+          case 0: r = 1; g = f; b = 0; break;
+          case 1: r = q; g = 1; b = 0; break;
+          case 2: r = 0; g = 1; b = f; break;
+          case 3: r = 0; g = q; b = 1; break;
+          case 4: r = f; g = 0; b = 1; break;
+          case 5: r = 1; g = 0; b = q; break;
+        }
+        var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
+        return (c);
+      },
+      clear: function(){
+        $("#gamecanvas").remove();
+        this.create();
+      }
     }
     
   }
