@@ -6,6 +6,8 @@
   
   var wordfinder = {
     
+    state: 'ready', // ready, resigned, completed
+    
     init: function(){
       console.log('init');
       wordfinder.wordlist.create();
@@ -18,24 +20,49 @@
      * basic game controls
      */
     controls:{
+      
       create: function(){
         $('#reset').off().on('click', wordfinder.controls.reset);
         $('#resign').off().on('click', wordfinder.controls.resign);
       },
+      
       reset: function(){
         console.log('reset');
-        $("#wordlist-container").empty();
-        $("#gameboard-container").empty();
-        wordfinder.init();
+        
+        function reset(){
+          wordfinder.state = 'ready';
+          $("#wordlist-container").empty();
+          $("#gameboard-container").empty();
+          $("#results-container").empty();
+          wordfinder.init();        
+        }
+        
+        if(wordfinder.state == 'resigned' ||
+           wordfinder.state == 'completed'){
+          reset();
+          return;
+        }
+        
+        var r = confirm("You want to reset the game? All found words will be erased.");
+        if (r === true) {
+          reset();
+        }
       },
+      
       resign: function(){
         console.log('resign');
-        $("#wordlist-container").empty();
-        $("#gameboard-container").empty();      
+        var r = confirm("You want to resign the game?");
+        if (r === true) {
+          wordfinder.state = 'resigned';
+          wordfinder.resultsboard.indicateResigned();
+          wordfinder.gameboard.lock();
+        }        
       },
+      
       gameCompleted: function(){
         console.log('game-completed');
       },         
+    
     },
     
     resultsboard: {
@@ -48,23 +75,39 @@
         $('#results-container')
           .append(display);
 
-        this.update('Ready to Play!');
+        this.clear();
 
       },
       
       update: function(update){
         $("#results").html(update);
       },
+
+      clear: function(){
+        $('#results').removeClass();
+        this.update('Ready to Play!');
+      },
       
       indicateComplete: function(){
+        wordfinder.gameboard.lock();
         this.update('You found all the words on this puzzle.');
+        wordfinder.state = 'completed';
         $("#results").addClass('completed');
-      }
+      },
+      
+      indicateResigned: function(){
+        var words = wordfinder.wordlist.words.length;
+        var found = wordfinder.wordlist.found.length;
+        var results = found+' / '+words;
+        this.update('You resigned. You found '+results+' words.');
+        $("#results").addClass('resigned');
+      }      
       
     },
 
     /**
      * list of words to find
+     * checks game completion
      */    
     wordlist:{
       
@@ -114,7 +157,7 @@
     
     gameboard: {
       
-      state: 'startup',
+      state: 'startup', // startup, waiting, selectA, selectB
       
       selected_a: [],
       
@@ -185,9 +228,9 @@
             $(this).removeClass('selectB');
             wordfinder.gameboard.state = 'selectA';
           }
-          
-        }else if(state == 'selectB'){
-          
+        }else{
+          console.log('invalid or selectB state.')
+          return false;
         }
       },
       
@@ -236,6 +279,9 @@
         }
       },
 
+      /**
+       * determines word within the two selected points
+       */ 
       getWord: function(selected_a, selected_b){
         
         var wordarr = []
@@ -266,6 +312,11 @@
         $('td').removeClass('selectA');
         $('td').removeClass('selectB');
         wordfinder.gameboard.state = 'waiting';
+      },
+      
+      lock: function(){
+        this.resetBoard();
+        $('td').off();
       }
       
     }
