@@ -4,6 +4,8 @@
   console.log(data);
   console.log(lineMath);
   
+  data = data['gameone'];
+  
   var wordfinder = {
     
     state: 'ready', // ready, resigned, completed
@@ -22,6 +24,7 @@
     controls:{
       
       create: function(){
+        $('#resign').show();
         $('#reset').off().on('click', wordfinder.controls.reset);
         $('#resign').off().on('click', wordfinder.controls.resign);
       },
@@ -38,7 +41,7 @@
         }
         
         if(wordfinder.state == 'resigned' ||
-           wordfinder.state == 'completed'){
+          wordfinder.state == 'completed'){
           reset();
           return;
         }
@@ -61,7 +64,11 @@
       
       gameCompleted: function(){
         console.log('game-completed');
-      },         
+      },
+      
+      disableResign: function(){
+        $('#resign').hide();
+      }
     
     },
     
@@ -92,6 +99,7 @@
         wordfinder.gameboard.lock();
         this.update('You found all the words on this puzzle.');
         wordfinder.state = 'completed';
+        wordfinder.controls.disableResign();
         $("#results").addClass('completed');
       },
       
