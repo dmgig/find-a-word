@@ -34,6 +34,7 @@
         
         function reset(){
           wordfinder.state = 'ready';
+          wordfinder.wordlist.reset();
           $("#wordlist-container").empty();
           $("#gameboard-container").empty();
           $("#results-container").empty();
@@ -124,9 +125,7 @@
       found: [],
       
       create: function(){
-        console.log('create wordlist');
-        console.log('wordlist '+data.wordlist.length)
-        
+
         var display = $('<div></div>')
                         .attr('id', 'wordlist');
         $('#wordlist-container')
@@ -156,9 +155,11 @@
       },
       
       isGameCompleted: function(){
-        console.log('is game completed');
-        console.log(this)
         return this.words.length == this.found.length;
+      },
+
+      reset: function(){
+        this.found = [];
       }
 
     },
@@ -232,7 +233,7 @@
             }
             wordfinder.gameboard.resetBoard();
           }else{
-            alert('That is not a word.')
+            alert('That is not a word.');
             $(this).removeClass('selectB');
             wordfinder.gameboard.state = 'selectA';
           }
@@ -257,7 +258,7 @@
         if(selected_a[0] == thissquare[0] ||
            selected_a[1] == thissquare[1] ||
            Math.abs(selected_a[0] - thissquare[0]) == Math.abs(selected_a[1] - thissquare[1])){
-            $(this).addClass('inline');
+          $(this).addClass('inline');
         }else{
             $(this).addClass('outofline');
         }
@@ -275,7 +276,7 @@
         var selected_b = wordfinder.gameboard.selected_b;
         
         var selected_word = this.getWord(selected_a, selected_b);
-        
+
         if(wordfinder.wordlist.isInList(selected_word)){
           console.log('found a word')
           wordfinder.gameboard.highlightWord(selected_a, selected_b);
