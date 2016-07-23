@@ -40,10 +40,18 @@ var lineMath = function(A, B){
   }
 
   var coordinates = [];
+  var y;
   if(A[0] != B[0]){
-    for (x = A[0]; x <= B[0]; x++) {
-      var y = m * x + b;
-      coordinates.push([x, y]);
+    if(A[0] < B[0]){
+      for (x = A[0]; x <= B[0]; x++) {
+        y = m * x + b;
+        coordinates.push([x, y]);
+      }      
+    }else{
+      for (x = A[0]; x >= B[0]; x--) {
+        y = m * x + b;
+        coordinates.push([x, y]);
+      }       
     }
   }else{
     for (y = A[1]; y <= B[1]; y++) {
