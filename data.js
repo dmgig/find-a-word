@@ -1,14 +1,14 @@
 var data = {
   
   "testgame":{
-    wordlist: ['COW', 'CAT', 'DOG', 'PIG'],
+    wordlist: ['COW', 'CAT', 'DOG', 'PIG', 'OWL'],
     gameboard: [
-      ['G','I','P','D','E','F'],
-      ['A','B','C','D','E','F'],
-      ['A','B','C','O','W','F'],
-      ['A','B','A','D','E','D'],
-      ['A','B','T','D','E','O'],
-      ['A','B','C','D','E','G'],
+      ['G','O','D','X','X','X'],
+      ['X','X','X','X','O','X'],
+      ['X','X','C','O','W','X'],
+      ['C','X','X','X','L','G'],
+      ['X','A','X','X','I','X'],
+      ['X','X','T','P','X','X'],
     ]
   },
   
