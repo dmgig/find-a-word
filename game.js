@@ -217,8 +217,11 @@
 
       selectB: function(){
           var el = $(this);
-          if(el.hasClass('outofline')) return;
-          el.addClass('selectB');
+          if(el.hasClass('outofline') ||
+             el.hasClass('selectA')){
+            wordfinder.gameboard.resetBoard();
+            return;
+          }
           wordfinder.gameboard.state = 'selectB';
           wordfinder.gameboard.selected_b = [el.data('x'), el.data('y')]          
           var is_word = wordfinder.gameboard.checkWord();
@@ -230,23 +233,21 @@
             wordfinder.gameboard.resetBoard();
           }else{
             alert('That is not a word.');
-            el.removeClass('selectB');
             wordfinder.gameboard.state = 'waiting';
           }        
       },
 
       isInLine: function(){
-        
+
         var state = wordfinder.gameboard.state;
-        if(state != 'selectA')          return;
-        if($(this).hasClass('selectA')) return;
+
+        if(state == 'waiting') return;
+        
+        wordfinder.gameboard.clearDraggedSelection();
         
         var selected_a = wordfinder.gameboard.selected_a;
         var thissquare = [$(this).data('x'), $(this).data('y')];
-        
-        console.log(selected_a);
-        console.log(thissquare);
-        
+
         if(selected_a[0] == thissquare[0] ||
            selected_a[1] == thissquare[1] ||
            Math.abs(selected_a[0] - thissquare[0]) == Math.abs(selected_a[1] - thissquare[1])){
@@ -280,6 +281,7 @@
         }else{
           console.log('not a word');
           wordfinder.gameboard.clearDraggedSelection();
+          wordfinder.gameboard.resetBoard();
           return false;
         }
       },
@@ -320,10 +322,11 @@
       highlightFoundWord(selected_a, selected_b){
         wordfinder.canvas.circleWord(selected_a, selected_b);
       },
-      
+
       resetBoard: function(){
         $('td').removeClass('selectA');
         $('td').removeClass('selectB');
+        this.clearDraggedSelection();
         wordfinder.gameboard.state = 'waiting';
       },
       
