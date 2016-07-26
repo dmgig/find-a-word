@@ -188,9 +188,10 @@
           return $('<td>'+letter+'</td>')
                   .data('x',x)
                   .data('y',y)
-                  .on('click', wordfinder.gameboard.select)
+                  .on('mousedown',  wordfinder.gameboard.selectA)
+                  .on('mouseup',    wordfinder.gameboard.selectB)
                   .on('mouseenter', wordfinder.gameboard.isInLine)
-                  .on('mouseleave', wordfinder.gameboard.clearInLine);          
+                  .on('mouseleave', wordfinder.gameboard.clearInLine);       
         }
         
         for(var i in data.gameboard){
@@ -207,28 +208,19 @@
         }
       },
       
-      select: function(){
-        console.log($(this));
-        
-        // if selected is reeselected, remove selection
-        if($(this).hasClass('selectA')){
-          $(this).removeClass('selectA');
-          wordfinder.gameboard.state = 'waiting';
-          return;
-        }
-        
-        var state = wordfinder.gameboard.state;
-        console.log(state);
-        
-        if(state == 'waiting'){
-          $(this).addClass('selectA');
+      selectA: function(){
+          var el = $(this);
+          el.addClass('selectA');
           wordfinder.gameboard.state = 'selectA';
-          wordfinder.gameboard.selected_a = [$(this).data('x'), $(this).data('y')]
-        }else if(state == 'selectA'){
-          if($(this).hasClass('outofline')) return;
-          $(this).addClass('selectB');
+          wordfinder.gameboard.selected_a = [el.data('x'), el.data('y')]       
+      },
+
+      selectB: function(){
+          var el = $(this);
+          if(el.hasClass('outofline')) return;
+          el.addClass('selectB');
           wordfinder.gameboard.state = 'selectB';
-          wordfinder.gameboard.selected_b = [$(this).data('x'), $(this).data('y')]          
+          wordfinder.gameboard.selected_b = [el.data('x'), el.data('y')]          
           var is_word = wordfinder.gameboard.checkWord();
           if(is_word){
             wordfinder.gameboard.state = 'waiting';
@@ -238,14 +230,48 @@
             wordfinder.gameboard.resetBoard();
           }else{
             alert('That is not a word.');
-            $(this).removeClass('selectB');
+            el.removeClass('selectB');
             wordfinder.gameboard.state = 'selectA';
-          }
-        }else{
-          console.log('invalid or selectB state.')
-          return false;
-        }
+          }        
       },
+      
+      // select: function(){
+      //   console.log($(this));
+        
+      //   // if selected is reeselected, remove selection
+      //   if($(this).hasClass('selectA')){
+      //     $(this).removeClass('selectA');
+      //     wordfinder.gameboard.state = 'waiting';
+      //     return;
+      //   }
+        
+      //   var state = wordfinder.gameboard.state;
+      //   console.log(state);
+        
+      //   if(state == 'waiting'){
+
+      //   }else if(state == 'selectA'){
+      //     if($(this).hasClass('outofline')) return;
+      //     $(this).addClass('selectB');
+      //     wordfinder.gameboard.state = 'selectB';
+      //     wordfinder.gameboard.selected_b = [$(this).data('x'), $(this).data('y')]          
+      //     var is_word = wordfinder.gameboard.checkWord();
+      //     if(is_word){
+      //       wordfinder.gameboard.state = 'waiting';
+      //       if(wordfinder.wordlist.isGameCompleted()){
+      //         wordfinder.resultsboard.indicateComplete();
+      //       }
+      //       wordfinder.gameboard.resetBoard();
+      //     }else{
+      //       alert('That is not a word.');
+      //       $(this).removeClass('selectB');
+      //       wordfinder.gameboard.state = 'selectA';
+      //     }
+      //   }else{
+      //     console.log('invalid or selectB state.')
+      //     return false;
+      //   }
+      // },
       
       isInLine: function(){
         
@@ -356,7 +382,7 @@
         console.log(A,B)
         
         function f(n){
-          return (n*26)+12;
+          return (n*26)+13;
         }
         
         A = [f(A[0]), f(A[1])];
