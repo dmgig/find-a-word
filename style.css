@@ -2,6 +2,8 @@ body{
   font-family:Arial;
 }
 
+/** Global */
+
 a.btn{
   border:2px solid #FFBC7A;
   border-radius: 12px; 
@@ -15,6 +17,17 @@ a.btn:hover{
   background-color:#FFE1C3;
   color:black;
 }
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
 
 #results{
   margin:10px;
@@ -53,7 +66,6 @@ a.btn:hover{
   position:absolute;
   z-index:1;
   opacity:.4;
-  /** border:2px dotted black; */
 }
 
 /** Gameboard */
