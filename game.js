@@ -231,48 +231,10 @@
           }else{
             alert('That is not a word.');
             el.removeClass('selectB');
-            wordfinder.gameboard.state = 'selectA';
+            wordfinder.gameboard.state = 'waiting';
           }        
       },
-      
-      // select: function(){
-      //   console.log($(this));
-        
-      //   // if selected is reeselected, remove selection
-      //   if($(this).hasClass('selectA')){
-      //     $(this).removeClass('selectA');
-      //     wordfinder.gameboard.state = 'waiting';
-      //     return;
-      //   }
-        
-      //   var state = wordfinder.gameboard.state;
-      //   console.log(state);
-        
-      //   if(state == 'waiting'){
 
-      //   }else if(state == 'selectA'){
-      //     if($(this).hasClass('outofline')) return;
-      //     $(this).addClass('selectB');
-      //     wordfinder.gameboard.state = 'selectB';
-      //     wordfinder.gameboard.selected_b = [$(this).data('x'), $(this).data('y')]          
-      //     var is_word = wordfinder.gameboard.checkWord();
-      //     if(is_word){
-      //       wordfinder.gameboard.state = 'waiting';
-      //       if(wordfinder.wordlist.isGameCompleted()){
-      //         wordfinder.resultsboard.indicateComplete();
-      //       }
-      //       wordfinder.gameboard.resetBoard();
-      //     }else{
-      //       alert('That is not a word.');
-      //       $(this).removeClass('selectB');
-      //       wordfinder.gameboard.state = 'selectA';
-      //     }
-      //   }else{
-      //     console.log('invalid or selectB state.')
-      //     return false;
-      //   }
-      // },
-      
       isInLine: function(){
         
         var state = wordfinder.gameboard.state;
@@ -289,8 +251,10 @@
            selected_a[1] == thissquare[1] ||
            Math.abs(selected_a[0] - thissquare[0]) == Math.abs(selected_a[1] - thissquare[1])){
           $(this).addClass('inline');
+          wordfinder.gameboard.highlightDraggedSelection(selected_a,thissquare);
         }else{
-            $(this).addClass('outofline');
+          $(this).addClass('outofline');
+          wordfinder.gameboard.clearDraggedSelection();
         }
         
       },
@@ -309,11 +273,13 @@
 
         if(wordfinder.wordlist.isInList(selected_word)){
           console.log('found a word')
-          wordfinder.gameboard.highlightWord(selected_a, selected_b);
+          wordfinder.gameboard.highlightFoundWord(selected_a, selected_b);
           wordfinder.wordlist.crossOffList(selected_word);
+          wordfinder.gameboard.clearDraggedSelection();
           return true;
         }else{
-          console.log('not a word')
+          console.log('not a word');
+          wordfinder.gameboard.clearDraggedSelection();
           return false;
         }
       },
@@ -339,12 +305,19 @@
         
       },
 
-      highlightWord(selected_a, selected_b){
-        // var coordinates = lineMath(selected_a, selected_b);
-        // for(var i in coordinates){
-        //   var c = coordinates[i];
-        //   $('tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('foundMe');
-        // }
+      highlightDraggedSelection(A,H){
+        var coordinates = lineMath(A,H);
+          for(var i in coordinates){
+           var c = coordinates[i];
+           $('tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('dragged-selection');
+        }
+      },
+
+      clearDraggedSelection(){
+        $('td').removeClass('dragged-selection');
+      },      
+
+      highlightFoundWord(selected_a, selected_b){
         wordfinder.canvas.circleWord(selected_a, selected_b);
       },
       
