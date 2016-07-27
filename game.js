@@ -36,8 +36,8 @@
         function reset(){
           wordfinder.state = 'ready';
           wordfinder.wordlist.reset();
-          $("#wordlist-container").empty();
-          $("#gameboard-container").empty();
+          $("#wordlist-subcontainer").empty();
+          $("#gameboard-subcontainer").empty();
           $("#results-container").empty();
           wordfinder.init();        
         }
