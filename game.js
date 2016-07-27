@@ -203,6 +203,11 @@
 
           }
         }
+        
+        $('#gameboard-subcontainer')
+          .css('height', $("#gameboard").height()+"px")
+          .css('width', $("#gameboard").width()+"px");
+        
       },
       
       selectA: function(){
@@ -339,14 +344,17 @@
                       .attr('id','gamecanvas');
         $('#gameboard-subcontainer').append(canvas);
         
-        var top    = $("#gameboard").offset().top;
-        var left   = $("#gameboard").offset().left;
-        var height = $("#gameboard").height();
-        var width  = $("#gameboard").width();
+        var top    = $("#gameboard").position().top;
+        var left   = $("#gameboard").css('margin', '0 auto');
+        var height = $("#gameboard").height() - 2;
+        var width  = $("#gameboard").width() - 2;
+        console.log(height+' || '+width)
         
         $("#gamecanvas")
           .css('top', top+'px')
           .css('left', left+'px')
+          .css('width', width+'px')
+          .css('height', height+'px')
           .attr('width', width)
           .attr('height', height);
       },
