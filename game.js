@@ -251,7 +251,7 @@
 
         if(selected_a[0] == thissquare[0] ||
            selected_a[1] == thissquare[1] ||
-          Math.abs(selected_a[0] - thissquare[0]) == Math.abs(selected_a[1] - thissquare[1])){
+           Math.abs(selected_a[0] - thissquare[0]) == Math.abs(selected_a[1] - thissquare[1])){
           wordfinder.gameboard.highlightDraggedSelection(selected_a,thissquare);
         }else{
           $(this).addClass('outofline');
@@ -261,7 +261,6 @@
       },
 
       clearInLine: function(){
-        $(this).removeClass('inline');
         $(this).removeClass('outofline')
       },
       
