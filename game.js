@@ -1,9 +1,6 @@
 (function(data, lineMath){
   'use strict';
-  
-  console.log(data);
-  console.log(lineMath);
-  
+
   data = data['gameone'];
   
   var wordfinder = {
@@ -12,20 +9,20 @@
     
     init: function(){
       console.log('init');
+      wordfinder.controls.create();
+      wordfinder.resultsboard.create();      
       wordfinder.wordlist.create();
       wordfinder.gameboard.create();
       wordfinder.canvas.create();
-      wordfinder.controls.create();
-      wordfinder.resultsboard.create();
     },
     
     /**
-     * basic game controls
+     * basic page controls
      */
     controls:{
       
       create: function(){
-        $('#resign').show();
+        this.enableResign();
         $('#reset').off().on('click', wordfinder.controls.reset);
         $('#resign').off().on('click', wordfinder.controls.resign);
       },
@@ -43,7 +40,7 @@
         }
         
         if(wordfinder.state == 'resigned' ||
-          wordfinder.state == 'completed'){
+           wordfinder.state == 'completed'){
           reset();
           return;
         }
@@ -67,13 +64,20 @@
       gameCompleted: function(){
         console.log('game-completed');
       },
+
+      enableResign: function(){
+        $('#resign').css('visibility','visible');
+      },
       
       disableResign: function(){
-        $('#resign').hide();
+        $('#resign').css('visibility','hidden');
       }
     
     },
-    
+
+    /**
+     * Results, problems indication board
+     */        
     resultsboard: {
  
        create: function(){
@@ -85,16 +89,10 @@
           .append(display);
 
         this.clear();
-
       },
       
       update: function(update){
         $("#results").html(update);
-      },
-
-      clear: function(){
-        $('#results').removeClass();
-        this.update('Ready to Play!');
       },
       
       indicateComplete: function(){
@@ -108,9 +106,14 @@
       indicateResigned: function(){
         var words = wordfinder.wordlist.words.length;
         var found = wordfinder.wordlist.found.length;
-        var results = found+' / '+words;
+        var results = found+' of '+words;
         this.update('You resigned. You found '+results+' words.');
         $("#results").addClass('resigned');
+      },
+
+      clear: function(){
+        $('#results').removeClass();
+        this.update('Ready to Play!');
       }      
       
     },
@@ -164,7 +167,10 @@
       }
 
     },
-    
+
+    /**
+     * Gameboard w/ lettered tiles
+     */    
     gameboard: {
       
       state: 'startup', // startup, waiting, selectA, selectB
@@ -180,7 +186,7 @@
         var board = $('<table></table>')
                       .attr('id','gameboard');
         $('#gameboard-subcontainer').append(board);
-          
+
         function makeGamesquare(x,y,letter){
           return $('<td>'+letter+'</td>')
                   .data('x',x)
@@ -204,12 +210,13 @@
           }
         }
         
+        // once created, we have to give this element width and height for
+        // proper page layout
         $('#gameboard-subcontainer')
           .css('height', $("#gameboard").height()+"px")
           .css('width', $("#gameboard").width()+"px");
-        
       },
-      
+
       selectA: function(){
           var el = $(this);
           el.addClass('selectA');
@@ -241,10 +248,7 @@
       isInLine: function(){
 
         var state = wordfinder.gameboard.state;
-
         if(state == 'waiting') return;
-        
-        wordfinder.gameboard.clearDraggedSelection();
         
         var selected_a = wordfinder.gameboard.selected_a;
         var thissquare = [$(this).data('x'), $(this).data('y')];
@@ -255,31 +259,30 @@
           wordfinder.gameboard.highlightDraggedSelection(selected_a,thissquare);
         }else{
           $(this).addClass('outofline');
-          wordfinder.gameboard.clearDraggedSelection();
         }
         
       },
 
       clearInLine: function(){
-        $(this).removeClass('outofline')
+        wordfinder.gameboard.clearDraggedSelection();
+        $(this).removeClass('outofline');
       },
       
       checkWord: function(){
         
-        var selected_a = wordfinder.gameboard.selected_a;
-        var selected_b = wordfinder.gameboard.selected_b;
-        
+        var selected_a    = wordfinder.gameboard.selected_a;
+        var selected_b    = wordfinder.gameboard.selected_b;
         var selected_word = this.getWord(selected_a, selected_b);
-
-        if(wordfinder.wordlist.isInList(selected_word)){
+       
+        wordfinder.gameboard.clearDraggedSelection();
+       
+        if(wordfinder.wordlist.isInList(selected_word)){ // if found
           console.log('found a word')
-          wordfinder.gameboard.highlightFoundWord(selected_a, selected_b);
+          wordfinder.canvas.circleWord(selected_a, selected_b);
           wordfinder.wordlist.crossOffList(selected_word);
-          wordfinder.gameboard.clearDraggedSelection();
           return true;
-        }else{
+        }else{ // if not found
           console.log(selected_word+' is not a word on the list.')
-          wordfinder.gameboard.clearDraggedSelection();
           wordfinder.gameboard.resetBoard();
           return false;
         }
@@ -290,9 +293,8 @@
        */ 
       getWord: function(selected_a, selected_b){
         
-        var wordarr = []
-        
-        var coordinates = lineMath(selected_a, selected_b)
+        var wordarr     = [];
+        var coordinates = lineMath(selected_a, selected_b);
 
         for(var i in coordinates){
           var c = coordinates[i];
@@ -300,31 +302,28 @@
           wordarr.push(letter);
         }
         var word = wordarr.join('');
-        console.log('word is: '+word);
         
         return word;
-        
       },
 
-      highlightDraggedSelection(A,H){
-        var coordinates = lineMath(A,H);
+      /**
+       * highlight all squares between coordinates. should only be triggered
+       * after confirmation that line is straight (in this case)
+       */
+      highlightDraggedSelection(A,B){
+        var coordinates = lineMath(A,B);
           for(var i in coordinates){
-           var c = coordinates[i];
-           $('tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('dragged-selection');
+            var c = coordinates[i];
+            $('tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('dragged-selection');
         }
       },
 
       clearDraggedSelection(){
         $('td').removeClass('dragged-selection');
-      },      
-
-      highlightFoundWord(selected_a, selected_b){
-        wordfinder.canvas.circleWord(selected_a, selected_b);
       },
 
       resetBoard: function(){
-        $('td').removeClass('selectA');
-        $('td').removeClass('selectB');
+        $('td').removeClass();
         this.clearDraggedSelection();
         wordfinder.gameboard.state = 'waiting';
       },
@@ -336,18 +335,21 @@
       
     },
     
+    /**
+     * found word highlight
+     */
     canvas:{
+      
       create: function(){
+        
         var canvas = $('<canvas></canvas>')
-                      .attr('id','gamecanvas');
+                        .attr('id','gamecanvas');
         $('#gameboard-subcontainer').append(canvas);
         
         var top    = $("#gameboard").position().top;
         var left   = $("#gameboard").css('margin', '0 auto');
         var height = $("#gameboard").height() - 2;
         var width  = $("#gameboard").width() - 2;
-        console.log(height+' || '+width)
-        
         $("#gamecanvas")
           .css('top', top+'px')
           .css('left', left+'px')
@@ -356,6 +358,7 @@
           .attr('width', width)
           .attr('height', height);
       },
+      
       circleWord: function(A,B){
         console.log('circleword');
         console.log(A,B)
@@ -363,23 +366,22 @@
         function f(n){
           return (n*26)+13;
         }
-        
         A = [f(A[0]), f(A[1])];
         B = [f(B[0]), f(B[1])];
-        console.log(A)
-        console.log(B)
+
         var c   = document.getElementById("gamecanvas");
         var ctx = c.getContext("2d");
         ctx.beginPath();
-        ctx.lineCap="round";
-        ctx.lineWidth=20;
+        ctx.lineCap = "round";
+        ctx.lineWidth = 20;
         ctx.strokeStyle = this.rainbow(20,Math.floor(Math.random() * 20) + 1  );
         ctx.moveTo(A[0],A[1]);
         ctx.lineTo(B[0],B[1]);
         ctx.stroke();
       },
+      
       rainbow: function(numOfSteps, step) {
-        // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
+        // This function generates vibrant, "evenly spaced" colours (i.e. no clustering).
         // Adam Cole, 2011-Sept-14
         // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
         var r, g, b;
@@ -398,6 +400,7 @@
         var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
         return (c);
       },
+      
       clear: function(){
         $("#gamecanvas").remove();
         this.create();
