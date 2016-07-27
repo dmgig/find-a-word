@@ -127,18 +127,15 @@
       
       create: function(){
 
-        var display = $('<div></div>')
+        var display = $('<ul></ul>')
                         .attr('id', 'wordlist');
-        $('#wordlist-container')
+        $('#wordlist-subcontainer')
           .append(display);
 
         for(var i in data.wordlist){
-          var word = $('<span>'+data.wordlist[i]+'</span>')
+          var word = $('<li>'+data.wordlist[i]+'</li>')
                         .addClass('word');
           display.append(word);
-          if(i % 4 == 0){
-            display.append('<br />');
-          }
         }
       },
       
@@ -182,7 +179,7 @@
         
         var board = $('<table></table>')
                       .attr('id','gameboard');
-        $('#gameboard-container').append(board);
+        $('#gameboard-subcontainer').append(board);
           
         function makeGamesquare(x,y,letter){
           return $('<td>'+letter+'</td>')
@@ -340,14 +337,15 @@
       create: function(){
         var canvas = $('<canvas></canvas>')
                       .attr('id','gamecanvas');
-        $('#gameboard-container').append(canvas);
+        $('#gameboard-subcontainer').append(canvas);
         
-        var left   = $("#gameboard").offset().left - 8;
+        var top    = $("#gameboard").offset().top;
+        var left   = $("#gameboard").offset().left;
         var height = $("#gameboard").height();
         var width  = $("#gameboard").width();
         
         $("#gamecanvas")
-          .css('top', '0px')
+          .css('top', top+'px')
           .css('left', left+'px')
           .attr('width', width)
           .attr('height', height);
