@@ -279,7 +279,7 @@
           wordfinder.gameboard.clearDraggedSelection();
           return true;
         }else{
-          console.log('not a word');
+          console.log(selected_word+' is not a word on the list.')
           wordfinder.gameboard.clearDraggedSelection();
           wordfinder.gameboard.resetBoard();
           return false;
