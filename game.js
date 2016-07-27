@@ -148,9 +148,9 @@
       },
       
       crossOffList: function(word){
-        $('span.word').each(function(i, el){
+        $('li.word').each(function(i, el){
           if($(el).text() == word){
-            $(el).wrap('<strike></strike>');
+            $(el).html('<strike>'+word+'</strike>');
           }
         })
       },
