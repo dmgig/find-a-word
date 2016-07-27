@@ -123,24 +123,12 @@ a.btn:hover{
   background-color: yellow;
 }
 
-.selectB{
-  background-color: orange;
-}
-
-.inline{
-  background-color: lightGreen;
-}
-
 .outofline{
   background-color: pink;
 }
 
 .dragged-selection{
   background-color:lightBlue;
-}
-
-.selectA.foundMe{
-  background-color:yellow;
 }
 
 /** Controls */
