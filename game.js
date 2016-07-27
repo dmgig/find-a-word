@@ -232,7 +232,6 @@
             }
             wordfinder.gameboard.resetBoard();
           }else{
-            alert('That is not a word.');
             wordfinder.gameboard.state = 'waiting';
           }        
       },
