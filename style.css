@@ -78,15 +78,6 @@ a.btn:hover{
   font-size:20px;
 }
 
-/** Canvas */
-
-#gamecanvas{
-  border:1px solid black;
-  position:absolute;
-  z-index:1;
-  opacity:.4;
-}
-
 /** Gameboard */
 
 #gameboard-container{
@@ -95,13 +86,15 @@ a.btn:hover{
 
 #gameboard-subcontainer{
   position:relative;
+  width:100%;
+  margin:0 auto;
 }
 
 #gameboard{
+  position:absolute;
   z-index:2;
   font-family:monospace;
   font-size:20px;
-  margin: 0 auto;
 }
 
 #gameboard td{
@@ -114,6 +107,17 @@ a.btn:hover{
   outline:1px solid #CCC;
   cursor: pointer;
 }
+
+/** Canvas */
+
+#gamecanvas{
+  border:1px solid black;
+  position:absolute;
+  z-index:1;
+  opacity:.4;
+}
+
+/** highlight classes */
 
 .selectA{
   background-color: yellow;
