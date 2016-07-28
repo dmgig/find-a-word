@@ -1,7 +1,7 @@
 (function(data, lineMath){
   'use strict';
 
-  data = data['gameone'];
+  data = data['testgame'];
   
   var wordfinder = {
     
@@ -210,6 +210,10 @@
           }
         }
         
+        // reset board if mouse leaves gameboard
+        $("#gameboard")
+          .on('mouseleave', wordfinder.gameboard.resetBoard);
+        
         // once created, we have to give this element width and height for
         // proper page layout
         $('#gameboard-subcontainer')
@@ -323,8 +327,9 @@
       },
 
       resetBoard: function(){
+        console.log('resetBoard')
         $('td').removeClass();
-        this.clearDraggedSelection();
+        wordfinder.gameboard.clearDraggedSelection();
         wordfinder.gameboard.state = 'waiting';
       },
       
