@@ -1,0 +1,27 @@
+{
+  "name": "find-a-word",
+  "version": "1.0.0",
+  "description": "javascript word finder game",
+  "main": "data.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gist.github.com/129d744582776f6ec121a8cd3af5c094.git"
+  },
+  "author": "Dave M. Giglio <dave.m.giglio@gmail.com> (http://dmgig.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/129d744582776f6ec121a8cd3af5c094"
+  },
+  "homepage": "https://gist.github.com/129d744582776f6ec121a8cd3af5c094",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^2.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^1.5.4"
+  }
+}
