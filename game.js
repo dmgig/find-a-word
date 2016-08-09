@@ -4,7 +4,10 @@
 
   $.fn.findAword = function(options){
 
-    var fAw = this, settings, gamedata, wordfinder;
+    var 
+      fAw = this, 
+      $this = $(this), 
+      settings, gamedata, wordfinder;
 
     /** 
      * SETTINGS
@@ -22,12 +25,42 @@
     
       init: function(){
         console.log('init');
+        wordfinder.layout.create();
         wordfinder.controls.create();
         wordfinder.resultsboard.create();      
         wordfinder.wordlist.create();
         wordfinder.gameboard.create();
         wordfinder.canvas.create();
       },
+
+      /**
+       * page layout
+       */
+      layout:{
+        create: function(){
+          
+          $this.css('margin', '20px');
+          
+          var html = [];
+          html.push('<div id="results-container"></div>');  
+          html.push('<div id="wordlist-container">');  
+          html.push('  <div id="wordlist-subcontainer"></div>');  
+          html.push('  <div class="clear"></div>');  
+          html.push('</div>');  
+          html.push('<div id="gameboard-container" class="noselect">');  
+          html.push('  <div id="gameboard-subcontainer">');  
+          html.push('  </div>');  
+          html.push('</div>');  
+          html.push('<div id="controls-container">');  
+          html.push('  <div id="controls">');  
+          html.push('    <a id="reset"  class="btn">RESET</a>');  
+          html.push('    <a id="resign" class="btn">RESIGN</a>');  
+          html.push('  </div>');
+          html.push('</div>');
+          $this.append($(html.join("\n")));
+        }
+      },
+
     
       /**
        * basic page controls
@@ -38,6 +71,10 @@
           this.enableResign();
           $('#reset').off().on('click', wordfinder.controls.reset);
           $('#resign').off().on('click', wordfinder.controls.resign);
+          
+          if(!settings.buttons) 
+            $("#controls-container").hide();
+        
         },
       
         reset: function(){
@@ -102,6 +139,11 @@
             .append(display);
 
           this.clear();
+
+          if(!settings.results) 
+            $("#results-container").hide();
+          
+          
         },
       
         update: function(update){
@@ -137,7 +179,7 @@
        */    
       wordlist:{
       
-        words: data.wordlist,
+        words: gamedata.wordlist,
       
         found: [],
       
@@ -148,8 +190,8 @@
           $('#wordlist-subcontainer')
             .append(display);
 
-          for(var i in data.wordlist){
-            var word = $('<li>'+data.wordlist[i]+'</li>')
+          for(var i in gamedata.wordlist){
+            var word = $('<li>'+gamedata.wordlist[i]+'</li>')
                           .addClass('word');
             display.append(word);
           }
@@ -188,6 +230,8 @@
       
         state: 'startup', // startup, waiting, selectA, selectB
       
+        board: null,
+      
         selected_a: [],
       
         selected_b: [],
@@ -210,17 +254,17 @@
                     .on('mouseleave', wordfinder.gameboard.clearInLine);       
           }
         
-          for(var i in data.gameboard){
+          for(var i in gamedata.gameboard){
             board.append('<tr></tr>');
           
-            for(var j in data.gameboard[i]){
-              var letter     = data.gameboard[i][j];
+            for(var j in gamedata.gameboard[i]){
+              var letter     = gamedata.gameboard[i][j];
               var gamesquare = makeGamesquare(j,i,letter);
               board
                 .find('tr:eq('+i+')')
                 .append(gamesquare);
-
             }
+            
           }
         
           // reset board if mouse leaves gameboard
