@@ -1,7 +1,7 @@
-(function(data, lineMath){
+(function(data, lineMath, game_id){
   'use strict';
 
-  data = data['testgame'];
+  data = data[game_id];
   
   var wordfinder = {
     
@@ -314,7 +314,7 @@
        * highlight all squares between coordinates. should only be triggered
        * after confirmation that line is straight (in this case)
        */
-      highlightDraggedSelection: function(A,B){
+      highlightDraggedSelection(A,B){
         var coordinates = lineMath(A,B);
           for(var i in coordinates){
             var c = coordinates[i];
@@ -322,7 +322,7 @@
         }
       },
 
-      clearDraggedSelection: function(){
+      clearDraggedSelection(){
         $('td').removeClass('dragged-selection');
       },
 
@@ -416,4 +416,4 @@
   
   wordfinder.init();
   
-})(data, lineMath)
+})(data, lineMath, gablev_game_id)
