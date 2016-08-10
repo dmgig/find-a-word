@@ -63,4 +63,4 @@ var lineMath = function(A, B){
     coordinates.reverse();
     
   return coordinates;
-}
+};
