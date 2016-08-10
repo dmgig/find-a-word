@@ -375,7 +375,7 @@
          * highlight all squares between coordinates. should only be triggered
          * after confirmation that line is straight (in this case)
          */
-        highlightDraggedSelection(A,B){
+        highlightDraggedSelection: function(A,B){
           var coordinates = lineMath(A,B);
             for(var i in coordinates){
               var c = coordinates[i];
@@ -383,7 +383,7 @@
           }
         },
 
-        clearDraggedSelection(){
+        clearDraggedSelection: function(){
           $('#gameboard td').removeClass('dragged-selection');
         },
 
