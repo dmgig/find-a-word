@@ -14,7 +14,8 @@
      */
     settings = $.extend({
         buttons: true,
-        results: true
+        results: true,
+        instructions: 'Highlight (click-and-drag) as many as you can. Words can be forward, backward, or diagonal'
     }, options);
 
     gamedata = data[settings.game];
@@ -42,6 +43,7 @@
           $this.css('margin', '20px');
           
           var html = [];
+          html.push('<div id="instructions-container"></div>'); 
           html.push('<div id="results-container"></div>');  
           html.push('<div id="wordlist-container">');  
           html.push('  <div id="wordlist-subcontainer"></div>');  
@@ -58,6 +60,7 @@
           html.push('  </div>');
           html.push('</div>');
           $this.append($(html.join("\n")));
+          $("#instructions-container").html(settings.instructions);
         }
       },
 
@@ -246,6 +249,7 @@
 
           function makeGamesquare(x,y,letter){
             return $('<td>'+letter+'</td>')
+                    .css({backgroundColor: 'transparent' })
                     .data('x',x)
                     .data('y',y)
                     .on('mousedown',  wordfinder.gameboard.selectA)
@@ -359,7 +363,7 @@
 
           for(var i in coordinates){
             var c = coordinates[i];
-            var letter = $('tr:eq('+c[1]+') td:eq('+c[0]+')').text();
+            var letter = $('#gameboard tr:eq('+c[1]+') td:eq('+c[0]+')').text();
             wordarr.push(letter);
           }
           var word = wordarr.join('');
@@ -375,24 +379,24 @@
           var coordinates = lineMath(A,B);
             for(var i in coordinates){
               var c = coordinates[i];
-              $('tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('dragged-selection');
+              $('#gameboard tr:eq('+c[1]+') td:eq('+c[0]+')').addClass('dragged-selection');
           }
         },
 
         clearDraggedSelection(){
-          $('td').removeClass('dragged-selection');
+          $('#gameboard td').removeClass('dragged-selection');
         },
 
         resetBoard: function(){
           console.log('resetBoard')
-          $('td').removeClass();
+          $('#gameboard td').removeClass();
           wordfinder.gameboard.clearDraggedSelection();
           wordfinder.gameboard.state = 'waiting';
         },
       
         lock: function(){
           this.resetBoard();
-          $('td').off();
+          $('#gameboard td').off();
         }
       
       },
@@ -406,7 +410,7 @@
         
           var canvas = $('<canvas></canvas>')
                           .attr('id','gamecanvas');
-          $('#gameboard-subcontainer').append(canvas);
+          $('#gameboard-subcontainer').prepend(canvas);
         
           var top    = $("#gameboard").position().top;
           var left   = $("#gameboard").css('margin', '0 auto');
