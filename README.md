@@ -8,4 +8,4 @@ Long Island University psychology experiment
 
 tags: jQuery, canvas
 
-![screenshot of find-a-word](/screenshot.png "Screenshot")
+![screenshot of find-a-word](/find-a-word.png "Screenshot")
