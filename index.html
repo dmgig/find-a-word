@@ -9,27 +9,10 @@
   
   <h3>Word Finder</h3>
   
-  <div id="results-container"></div>  
-  
-  <div id="wordlist-container">
-    <div id="wordlist-subcontainer"></div>    
-    <div class="clear"></div>
-  </div>
-  
-  <div id="gameboard-container" class="noselect">
-    <div id="gameboard-subcontainer">
-    
-    </div>
-  </div>
-  
-  <div id="controls-container">
-    <div id="controls">
-      <a id="reset"  class="btn">RESET</a>
-      <a id="resign" class="btn">RESIGN</a>
-    </div>
-  </div>
+  <div id="findAword"></div>
   
   <script src="data.js"></script>
   <script src="game.js"></script>  
+  <script> $("#findAword").findAword({ game: 'gameone' }); </script>
 </body>
 </html>
