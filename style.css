@@ -1,7 +1,3 @@
-body{
-  font-family:Arial;
-}
-
 /** Global */
 
 a.btn{
@@ -30,6 +26,17 @@ a.btn:hover{
 
 .clear{ clear:both; }
 
+/** Instructions */
+
+#instructions-container{
+  margin:10px;
+  font-size:16px;
+  font-family: Arial, sans-serif;
+  text-align:center;
+}
+
+/** Results */
+
 #results{
   margin:10px;
   padding:10px;
@@ -49,6 +56,8 @@ a.btn:hover{
   border:2px solid red;
   color:darkRed;
 }
+
+/** Word List */
 
 #wordlist-container{
   position:relative;
@@ -95,6 +104,7 @@ a.btn:hover{
   z-index:2;
   font-family:monospace;
   font-size:20px;
+  background-color:transparent;
 }
 
 #gameboard td{
@@ -106,6 +116,10 @@ a.btn:hover{
   margin:0;
   outline:1px solid #CCC;
   cursor: pointer;
+  font-family:Courier;
+  font-weight:initial;
+  font-size:18px;
+  background-color:transparent;
 }
 
 /** Canvas */
@@ -119,16 +133,16 @@ a.btn:hover{
 
 /** highlight classes */
 
-.selectA{
-  background-color: yellow;
+#gameboard td.selectA{
+  background-color: yellow !important;
 }
 
-.outofline{
-  background-color: pink;
+#gameboard td.outofline{
+  background-color: pink !important;
 }
 
-.dragged-selection{
-  background-color:lightBlue;
+#gameboard td.dragged-selection{
+  background-color:lightBlue !important;
 }
 
 /** Controls */
