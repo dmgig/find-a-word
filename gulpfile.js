@@ -12,9 +12,9 @@ var jsFiles = [ 'lineMath.js', 'data.js', 'game.js' ],
 
 gulp.task('default', function() {  
     return gulp.src(jsFiles)
-             .pipe(concat('dist.js'))
+             .pipe(concat('jquery.find-a-word.js'))
              .pipe(gulp.dest(jsDest))
-             .pipe(rename('dist.min.js'))
+             .pipe(rename('jquery.find-a-word.min.js'))
              .pipe(uglify()).on('error', gulpUt.log)
              .pipe(gulp.dest(jsDest));
 });
